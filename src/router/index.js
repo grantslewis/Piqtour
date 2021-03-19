@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Gallery from '../views/Gallery.vue'
 import Random from '../views/Random.vue'
 import Photo from '../views/Photo.vue'
+import Collage from '../views/Collage.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/random',
     name: 'Random',
     component: Random
+  },
+  {
+    path: '/collage',
+    name: 'Collage',
+    component: Collage
   },
   {
     path: '/photo/:id',

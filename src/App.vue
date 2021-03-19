@@ -5,14 +5,23 @@
         <router-link  to="/">
           <img alt="logo" src="./assets/piqtour_logo_small.png">
         </router-link>
+        <div style="padding: 0px 10px">
+          <h1 id="slogan">Touring the Wonders of the World Through Picture!</h1>
+          <div id="links">
+            <router-link  to="/">Home</router-link>
+            <router-link  to="/gallery">Gallery</router-link>
+            <router-link  to="/random">Random</router-link>
+            <router-link  to="/collage">Collage</router-link>
+          </div>
+        </div>
+        
       </div>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <!-- <router-link to="/">Home</router-link> -->
+
     </div>
     <router-view/>
     <div id="footer">
-        <p>This website was made by Grant Lewis
-          <br>View the GitHub repository <a
+        <p>This website was made by Grant Lewis. View the GitHub repository <a
                 href="https://github.com/grantslewis/Piqtour" target="_blank">
                 here.</a>
         </p>
@@ -23,6 +32,7 @@
 <style>
 * {
   box-sizing: border-box;
+  margin: 0px;
 }
 
 #app {
@@ -37,8 +47,11 @@
   display: flex;
   flex-direction: row;
   align-content: center;
-  background: #42b983;
+  /* background: #42b983; */
   padding: 5px;
+  margin: 0px;
+  background-color: azure;
+  box-shadow: 0 6px 16px -1px rgb(0 0 0 / 13%);
 }
 
 #nav a {
@@ -47,13 +60,14 @@
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #5170FF;
 }
 
 #logo {
   display: flex;
+  align-content: center;
   padding: 0px 10px 0px 7px;
-  max-width: 75%;
+  width: 100%;
 }
 
 #logo img {
@@ -63,9 +77,36 @@
   width: 100%;
   /* width: auto;
   height: auto; */
-  max-height: 100vh;
+  /* max-height: 100vh; */
   /* padding: 10px; */
   /* object-fit: contain; */
+}
+
+#slogan {
+  padding: 0px;
+  text-align: right;
+  font-size: 0.8em;
+  width: 100%;
+  color: rgb(0,74,171);
+  margin: auto;
+}
+
+#links {
+  padding: 5px 5px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#footer {
+  display: flex;
+  height: 50px;
+  padding: 10px;
+  margin: 0px;
+  background-color: azure;
+  text-align: center;
+  align-content: center;
+  justify-content: center;
 }
 
 
@@ -76,6 +117,13 @@
 
   #nav {
     padding: 10px;
+  }
+
+  #slogan {
+    /* margin: 0px 10px; */
+    padding: 0px;
+    text-align: center;
+    font-size: 1.85em;
   }
 }
 

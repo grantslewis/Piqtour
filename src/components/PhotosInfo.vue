@@ -120,6 +120,4 @@ h2.title {
     }
 }
 </style>
-        </div>
-    </div>
-</template>
+       
