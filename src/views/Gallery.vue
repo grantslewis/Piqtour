@@ -25,9 +25,6 @@ export default {
       photo: {},
     }
   },
-//   props: {
-//     images: Array
-//   },
   created() {
     this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },

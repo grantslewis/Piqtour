@@ -1,10 +1,5 @@
 <template>
 <div class="photo-wrapper">
-    <!--  <router-link v-for="image in images" :key="image.id" :to="'/photo/' + image.id"> -->
-    <!-- <router-link :key="this.$route.params.id - 1" :to="'/photo/' + this.$route.params.id - 1" tag="button">Previous</router-link>
-    <router-link :key="this.random" :to="'/photo/' + this.random" tag="button">Random</router-link>
-    <router-link :key="this.$route.params.id + 1" :to="'/photo/' + this.$route.params.id + 1" tag="button">Next</router-link> -->
-    <!-- <button id="collagebutton" v-on:click="previousPhoto">Previous</button> -->
     <div class="photo-wrapper">
         <img class="photo" :src="'/images/'+photo.image" />
         
@@ -39,45 +34,13 @@ export default {
     return {
       photo: {},
       current: this.photo.id,
-      previous: this.photo.id - 1,
-      next: (this.photo.id + 1) % this.$root.$data.images.length,
-      random: Math.floor(Math.random()*this.$root.$data.images.length)
     }
   },
   methods: {
         getPhoto: function() {
-          if (this.$route.params.id < 1) {
-              this.$route.params.id = this.$root.$data.images.length - 1
-          } else if (this.$route.params.id > this.$root.$data.images.length) {
-              this.$route.params.id %= this.$root.$data.images.length
-          }
           this.current = this.$route.params.id;
           return this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
         },
-        // previousPhoto: function(id) {
-        // //   if (this.$root.$data.previous.length == 0) {
-        // //       if (this.photo.id == 0) {
-        // //           this.$route.params.id = this.$root.$data.images.length - 1
-        // //       } else {
-        // //           this.$route.params.id = this.photo.id - 1;
-        // //       }
-        // //   } else {
-        // //       this.$route.params.id = this.$root.$data.previous[this.$root.$data.previous.length - 1];
-        // //       this.$root.$data.previous.push(this.photo.id);
-        // //   }
-        // //   this.previous = this.getPhoto().id;
-        //     if (id == 1) {
-        //         return this.$root.$data.images.length - 1
-        //     } else {
-        //         return id - 1;
-        //     }
-        // },
-        // nextPhoto: function(id) {
-        //     return (id + 1) % this.$root.$data.images.length;
-        // },
-        // randomPhoto: function() {
-        //     return Math.floor(Math.random()*this.$root.$data.images.length)
-        // }
   },
   created() {
     this.photo = this.getPhoto();
@@ -108,8 +71,6 @@ export default {
 }
 
 .info-wrapper {
-    /* display: flex;
-    flex-direction: row; */
     text-align: right;
     font-size: 0.9em;
 }
