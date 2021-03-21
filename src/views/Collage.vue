@@ -84,7 +84,6 @@ export default {
     border: 0px;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 1em;
 }
 
 .info {

@@ -1,15 +1,5 @@
 <template>
     <div class="wrapper">
-        <!-- <div class="image" :style="{'background-image':'url(/images/'}">
-            <i class="fas fa-info-circle fa-2x"></i>
-            <div class="info">
-                <h2>{{inspirational_title}}</h2>
-                <br>
-                <h2>{{first_name}} + ", " + {{lastname}}</h2>
-                <h3>{{city}} + ", " + {{country}}</h3>
-                <h3>{{date_taken}}</h3>
-            </div>
-        </div> -->
         <div class="images">
             <router-link v-for="image in images" :key="image.id" :to="'/photo/' + image.id">
                 <div class="photo" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
@@ -17,22 +7,6 @@
                 </div>
             </router-link>
         </div>
-        
-        <!-- <div class="photos" v-for="image in images" :key="image.id">
-            <div class="photo" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
-                <i class="fas fa-times-circle fa-2x" v-show="this.infoselect" @click="clickInfo" ></i>
-                <i class="fas fa-info-circle fa-2x" v-show="this.photohover" @mouseover="hoverInfo"  @mouseout="hoverInfo" @click="clickInfo"></i>
-                <div class="info_bubble">
-                    
-                </div>
-                <div class="info" v-show="this.infoselect || this.infohover">
-                    <h2 class="title">{{image.inspirational_title}}</h2>
-                    <h2>{{image.first_name}} {{image.last_name}}</h2>
-                    <h3>{{imagecity}}, {{image.country}} <br />{image.date_taken}}</h3>
-                </div>
-                <img class="photo" :src="'/images/'+image.image" style="visibility: hidden;" />
-            </div>
-        </div> -->
     </div>
 </template>
 
@@ -52,9 +26,6 @@ export default {
 
     }
   },
-//   props: {
-//     images: Array
-//   },
   created() {
     this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },

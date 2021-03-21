@@ -10,14 +10,13 @@
           <div id="links">
             <router-link  to="/">Home</router-link>
             <router-link  to="/gallery">Gallery</router-link>
-            <router-link  to="/random">Random</router-link>
+            <!-- <router-link  to="/random">Random</router-link> -->
             <router-link  to="/collage">Collage</router-link>
           </div>
         </div>
         
       </div>
       <!-- <router-link to="/">Home</router-link> -->
-
     </div>
     <router-view/>
     <div id="footer">
@@ -28,6 +27,51 @@
     </div>
   </div>
 </template>
+
+
+<script>
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
+  setup() {
+    
+  },
+  data() {
+    return {
+      photo: {},
+      previous: {},
+      current: this.photo.id
+    }
+  },
+  methods: {
+    previousComic() {
+      this.number = this.current.num - 1;
+      if (this.number < 1)
+        this.number = 1;
+    },
+    nextComic() {
+      this.number = this.current.num + 1;
+      if (this.number > this.max)
+        this.number = this.max
+    },
+    lastComic() {
+      this.number = this.max;
+    },
+    getRandom(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum and minimum are inclusive
+    },
+    randomComic() {
+      this.number = this.getRandom(1, this.max);
+    },
+  }
+})
+</script>
+
+
+
+
 
 <style>
 * {
@@ -71,15 +115,7 @@
 }
 
 #logo img {
-  /* display: block;
-  margin: auto; */
-  /* background-size: conatin; */
   width: 100%;
-  /* width: auto;
-  height: auto; */
-  /* max-height: 100vh; */
-  /* padding: 10px; */
-  /* object-fit: contain; */
 }
 
 #slogan {

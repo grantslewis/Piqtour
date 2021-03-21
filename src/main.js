@@ -10,7 +10,8 @@ import mock from './mock-data.json'
 
 let data = {
   images: mock,
-  liked: []
+  liked: [],
+  previous: [],
 }
 
 new Vue({

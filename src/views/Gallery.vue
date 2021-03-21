@@ -1,39 +1,13 @@
 <template>
-    <div class="wrapper">
-        <!-- <div class="image" :style="{'background-image':'url(/images/'}">
-            <i class="fas fa-info-circle fa-2x"></i>
-            <div class="info">
-                <h2>{{inspirational_title}}</h2>
-                <br>
-                <h2>{{first_name}} + ", " + {{lastname}}</h2>
-                <h3>{{city}} + ", " + {{country}}</h3>
-                <h3>{{date_taken}}</h3>
+        <div class="wrapper">
+            <div class="images">
+                <router-link class="imgdiv" v-for="image in images" :key="image.id" :to="'/photo/' + image.id">
+                    <div class="image" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
+                        <img :src="'/images/'+image.image" class="image" style="visibility: hidden;" > 
+                    </div>
+                </router-link>
             </div>
-        </div> -->
-        <div class="images">
-            <router-link class="imgdiv" v-for="image in images" :key="image.id" :to="'/photo/' + image.id">
-                <div class="image" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
-                    <img :src="'/images/'+image.image" class="image" style="visibility: hidden;" > 
-                </div>
-            </router-link>
         </div>
-        
-        <!-- <div class="photos" v-for="image in images" :key="image.id">
-            <div class="photo" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
-                <i class="fas fa-times-circle fa-2x" v-show="this.infoselect" @click="clickInfo" ></i>
-                <i class="fas fa-info-circle fa-2x" v-show="this.photohover" @mouseover="hoverInfo"  @mouseout="hoverInfo" @click="clickInfo"></i>
-                <div class="info_bubble">
-                    
-                </div>
-                <div class="info" v-show="this.infoselect || this.infohover">
-                    <h2 class="title">{{image.inspirational_title}}</h2>
-                    <h2>{{image.first_name}} {{image.last_name}}</h2>
-                    <h3>{{imagecity}}, {{image.country}} <br />{image.date_taken}}</h3>
-                </div>
-                <img class="photo" :src="'/images/'+image.image" style="visibility: hidden;" />
-            </div>
-        </div> -->
-    </div>
 </template>
 
 <script>
@@ -94,21 +68,18 @@ export default {
 
 .images {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-content: center;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
-    max-width: 95%;
-    max-height: 250vh;
     height: auto;
+    width: 100%
 }
 
 .image {
     margin: 0px;
     width: auto;
-    /* padding: 5px; */
     height: 250px;
-    /* border-radius: 5px 5px; */
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -116,9 +87,7 @@ export default {
 .imgdiv {
     margin: 0px;
     width: auto;
-    /* padding: 5px; */
     height: auto;
-    /* height: 200px; */
     margin: 10px;
     border-radius: 5px 5px;
 }
@@ -132,7 +101,6 @@ export default {
     width: 100%;
     height: auto;
     max-height: 100vh;
-    /* object-fit: contain; */
 }
 
 .info {
