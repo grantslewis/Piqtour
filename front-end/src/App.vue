@@ -18,6 +18,7 @@
       </div>
       <!-- <router-link to="/">Home</router-link> -->
     </div>
+    <notifications/>
     <router-view/>
     <div id="footer">
         <p>This website was made by Grant Lewis. View the GitHub repository <a

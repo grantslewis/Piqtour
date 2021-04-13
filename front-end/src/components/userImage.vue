@@ -20,9 +20,9 @@
             <button type="submit">Create User</button> 
             <!-- @click="addUser()"  -->
         </form>
-      <div class="upload" @click="addUser" v-if="addedUser">
+      <!-- <div class="upload" @click="addUser" v-if="addedUser">
         <h2>{{addedUser.username}}'s account added propperly!</h2>
-      </div>
+      </div> -->
     </div>
   </div>
     
@@ -32,21 +32,43 @@
     </div>
     <div class="edit">
       <div class="form">
-        <input v-model="findTitle" placeholder="Search">
+        <input v-model="findUsername" placeholder="Search Your User">
         <div class="suggestions" v-if="suggestions.length > 0">
-          <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
+          <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
           </div>
         </div>
       </div>
-      <div class="upload" v-if="findUser">
-        <input type="text" v-model="findUser.username" placeholder="Username">
-        <p></p>
-        <input type="text" v-model="findUser.firstname" placeholder="First Name">
-        <p></p>
-        <input type="text" v-model="findUser.lastname" placeholder="Last Name">
-        <p></p>
-        <input type="number" v-model="findUser.age" placeholder="Age">
-        <p></p>
+      <div class="editingUser" v-if="findUser" @click="toggleEditUser()">
+        <h2>{{findUser.username}} is the active user</h2>
+        <br>
+        <button @click="editUser = !editUser">Edit Account</button>
+      </div>
+      
+
+      <div class="update" v-if="editUser === true">
+        <div > 
+          <h4>Username:</h4>
+          <input type="text" v-model="findUser.username" placeholder="Username">
+        </div>
+        <div> 
+          <h4>First Name:</h4>
+          <input type="text" v-model="findUser.firstname" placeholder="First Name">
+        </div>
+        <div> 
+          <h4>Last Name:</h4>
+          <input type="text" v-model="findUser.lastname" placeholder="Last Name">
+        </div>
+        <div> 
+          <h4>Age:</h4>
+          <input type="number" v-model="findUser.age" placeholder="Age">
+        </div>
+        <div class="actions" v-if="findUser">
+          <button @click="updateUser(findUser)">Save Changes</button>
+          <button @click="deleteUser(findUser)">Delete</button>
+        </div>
+
+        <!-- <image-modification :activeUserId="findUserId"/> -->
+        <!-- v-if="editUser === true" -->
 
         <!-- <input v-model="findItem.title">
         <p></p>
@@ -54,18 +76,18 @@
         <p></p>
         <img :src="findItem.path" /> -->
       </div>
-      <div class="actions" v-if="findUser">
-        <button @click="deleteItem(findUser)">Delete</button>
-        <button @click="editItem(findUser)">Edit</button>
-      </div>
+      
     </div>
+    
 </div>
 </template>
 
 
 <script>
+import ImageModification from './imageMods';
 import axios from 'axios';
 export default {
+  components: { ImageModification },
   name: 'UserModification',
   data() {
     return {
@@ -84,16 +106,18 @@ export default {
       images: [],
       userImages: [],
 
-      activeUserid: null,
-      addedUser: null,
+      // activeUserid: "",
+      // addedUser: null,
       
-      findTitle: "",
+      editUser: false,
+      findUsername: "",
       findUser: null,
+      findUserId: "",
     }
   },
   computed: {
     suggestions() {
-      let users = this.users.filter(user => user.title.toLowerCase().startsWith(this.findTitle.toLowerCase()));
+      let users = this.users.filter(user => user.username.toLowerCase().startsWith(this.findUsername.toLowerCase()));
       return users.sort((a, b) => a.title > b.title);
     }
   },
@@ -110,10 +134,15 @@ export default {
           age: this.age,
         });
         await this.getUsers();
+        this.$notify({
+          title: 'New user ' + this.username + ' has been added!',
+          text: 'Welcome to the Community!'
+        });
         this.username = "";
         this.firstname = "";
         this.lastname = "";
         this.age = "";
+
       } catch (error) {
         console.log(error);
       }
@@ -128,8 +157,14 @@ export default {
       }
     },
     selectUser(user) {
-        this.user = user;
-        this.getImages();
+        this.findUsername = "";
+        this.findUser = user;
+        this.findUserId = user._id;
+        this.$notify({
+          title: this.findUser.username + ' is now active!',
+          text: 'Welcome Back!'
+        });
+        // this.getImages();
     },
     async getUser(user) {
       try {
@@ -184,14 +219,6 @@ export default {
             console.log(error);
         }
     },
-    async deleteUser(user) {
-      try {
-        await axios.delete("/api/users/" + user._id);
-        this.getUsers();
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async deleteImage(image) {
         try {
             await axios.delete(`/api/users/images/${image._id}`);
@@ -203,8 +230,23 @@ export default {
     active(user) {
         return (this.user && user._id === this.user._id);
     },
+    
+    async deleteUser(user) {
+      try {
+        await axios.delete("/api/users/" + user._id);
 
-
+        this.editUser = false;
+        this.findUser = null;
+        this.getUsers();
+        this.$notify({
+          title: user.username + "'s account was deleted :'(",
+          text: 'We hope you come back soon!'
+        });
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async updateUser(user) {
       try {
         await axios.put("/api/users/" + user._id, {
@@ -214,6 +256,11 @@ export default {
           age: user.age,
         });
         // this.findUser = null;
+        this.$notify({
+          title: "Update for " + user.username + " was successful!",
+          text: 'You are a valued member of the community!'
+        });
+        this.editUser = false;
         this.getUsers();
         return true;
       } catch (error) {
@@ -254,8 +301,8 @@ export default {
 
 .circle {
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
   padding: 8px;
   background: #333;
   color: #fff;
