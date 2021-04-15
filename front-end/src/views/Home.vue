@@ -1,20 +1,27 @@
 <template>
   <div class="home">
-    <flicking 
-      :options="{ gap: 10, moveType: 'freeScroll'}"
-      @need-panel="e => {}"
-      @move-end="e => {}"
-      style="height: 120px"
-    > 
-    <!-- :plugins="plugins" 
-    :tag="'div'"
-      :viewportTag="'div'"
-      :cameraTag="'div'"
-    -->
-      <div>Words</div>
-      <div class="panel" v-for="image in images" :key="image._id"> <img :src="image.path"/></div>
-      <div>Me</div>
-    </flicking>
+    <div v-if="isFetching === false"> 
+      <flicking 
+        
+        :options="{ gap: 10, moveType: 'freeScroll'}"
+        @need-panel="e => {}"
+        @move-end="e => {}"
+        style="height: 120px"
+      > 
+      <!-- :plugins="plugins" 
+      :tag="'div'"
+        :viewportTag="'div'"
+        :cameraTag="'div'"
+      -->
+        <div>Words</div>
+        <div class="panel" v-for="word in test" :key="word"><p>{{word}}</p></div>
+        <div class="panel" v-for="image in images" :key="image._id"> <img :src="image.path"/></div>
+        <div>Me</div>
+      </flicking>
+    </div>
+    
+
+    <carousel :images.sync="images" :isFetching.sync="isFetching"/>
 
     <div class="slideshow-container"> 
       <div class="image" v-for="image in images" :key="image.id">
@@ -52,14 +59,17 @@ import { Flicking } from "@egjs/vue-flicking";
 // import { Component, Vue } from "vue-property-decorator";
 // import { Fade, AutoPlay } from "@egjs/flicking-plugins";
 import axios from 'axios';
+import Carousel from '../components/Carousel.vue';
 export default {
   name: 'Home',
   data() {
     return {
       isEditAllowedtest: true,
       images: this.getImages(),
+      isFetching: false,
       users: [],
       addNewUser: false,
+      test: ['Hello', 'My', 'Name', 'Is', 2],
 
       slideIndex: 0,
 
@@ -70,18 +80,23 @@ export default {
     }
   },
   created() {
+    // this.setFetching();
     this.getUsers();
     this.getImages();
   },
   components: {
     Flicking: Flicking,
     UserModification,
+    Carousel,
   },
   methods: {
     async getImages() {
         try {
             const response = await axios.get(`/api/images`);
             this.images = response.data;
+            this.$set(this.images);
+            // this.$set(this.isFetching, this.isFetching, false);
+            this.setFetching();
             return true;
         } catch (error) {
             console.log(error);
@@ -98,6 +113,9 @@ export default {
     },
     addUser() {
       this.addNewUser = !this.addNewUser;
+    },
+    setFetching() {
+      this.isFetching = !this.isFetching
     },
     async uploadImage() {
       try {
@@ -146,7 +164,10 @@ export default {
     },
     getNextId() {
       this.imgid = Math.floor(Math.random()*this.images.length)
-    }
+    },
+    // watch: {
+    //   'isFetched': 
+    // }
   },
   computed: {
     // images() {
