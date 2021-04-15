@@ -4,6 +4,7 @@ import router from './router'
 import Notifications from 'vue-notification';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
+import VueFlicking from "@egjs/vue-flicking";
 
 Vue.config.productionTip = false
 Vue.use(Notifications)
@@ -21,3 +22,5 @@ new Vue({
   // data,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.use(VueFlicking);

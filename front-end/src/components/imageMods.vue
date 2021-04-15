@@ -24,32 +24,36 @@
     </div>
   </div>
     
-    <div class="heading">
-      <div class="circle">2</div>
-      <h2>Edit/Delete an Account</h2>
-    </div>
-    <div class="edit">
-      <div class="form">
-        <input v-model="findTitle" placeholder="Search">
-        <div class="suggestions" v-if="suggestions.length > 0">
-          <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectImage(s)">{{s.title}}
+    <div v-if="isPhotoMod === true">
+      <div class="heading">
+        <div class="circle">2</div>
+        <h2>Edit/Delete an Account</h2>
+      </div>
+      <div class="edit">
+        <div class="form">
+          <input v-model="findTitle" placeholder="Search">
+          <div class="suggestions" v-if="suggestions.length > 0">
+            <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectImage(s)">{{s.title}}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="edit" v-if="findImage">
-        <input type="text" v-model="findImage.title" placeholder="Title">
-        <p></p>
-        <textarea v-model="findImage.description" placeholder="Description"></textarea>
-        <p></p>
-        <input type="text" v-model="findImage.location" placeholder="Location">
-        <p></p>
-        <img :src="findImage.path" />
-      </div>
-      <div class="actions" v-if="findImage">
-        <button @click="deleteItem(findUser)">Delete Image</button>
-        <button @click="editItem(findUser)">Save Edits</button>
+        <div class="edit" v-if="findImage">
+          <input type="text" v-model="findImage.title" placeholder="Title">
+          <p></p>
+          <textarea v-model="findImage.description" placeholder="Description"></textarea>
+          <p></p>
+          <input type="text" v-model="findImage.location" placeholder="Location">
+          <p></p>
+          <img :src="findImage.path"/>
+        </div>
+        <div class="actions" v-if="findImage">
+          <button @click="deleteItem(findUser)">Delete Image</button>
+          <button @click="editItem(findUser)">Save Edits</button>
+        </div>
       </div>
     </div>
+
+    
 </div>
 </template>
 
@@ -60,6 +64,7 @@ export default {
   name: 'ImageModification',
   props: {
     activeUserId: String,
+    isPhotoMod: Boolean,
   },
   data() {
     return {

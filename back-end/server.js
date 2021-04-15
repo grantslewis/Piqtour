@@ -152,7 +152,7 @@ app.get('/api/users/:userID/images', async (req, res) => {
 });
 
 // Get a list of all of the images
-app.get('/api/users/images', async (req, res) => {
+app.get('/api/images', async (req, res) => {  // /users/
   try {
     let images = await Image.find();
     res.send(images);
@@ -162,6 +162,8 @@ app.get('/api/users/images', async (req, res) => {
   }
 });
 
+
+// FIXMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE - req.params.imageID
 // Get a list of all of the images
 app.get('/api/users/images/:imageID', async (req, res) => {
   try {

@@ -10,8 +10,8 @@
           <div id="links">
             <router-link  to="/">Home</router-link>
             <router-link  to="/gallery">Gallery</router-link>
-            <!-- <router-link  to="/random">Random</router-link> -->
             <router-link  to="/collage">Collage</router-link>
+            <router-link  to="/edit">Edit Account/Images</router-link>
           </div>
         </div>
         

@@ -1,5 +1,21 @@
 <template>
   <div class="home">
+    <flicking 
+      :options="{ gap: 10, moveType: 'freeScroll'}"
+      @need-panel="e => {}"
+      @move-end="e => {}"
+      style="height: 120px"
+    > 
+    <!-- :plugins="plugins" 
+    :tag="'div'"
+      :viewportTag="'div'"
+      :cameraTag="'div'"
+    -->
+      <div>Words</div>
+      <div class="panel" v-for="image in images" :key="image._id"> <img :src="image.path"/></div>
+      <div>Me</div>
+    </flicking>
+
     <div class="slideshow-container"> 
       <div class="image" v-for="image in images" :key="image.id">
         <router-link :key="this.imgid" :to="'/photo/' + this.imgid">
@@ -18,9 +34,9 @@
       <span class="dot" @click="currentSlide(2)"></span>
       <span class="dot" @click="currentSlide(3)"></span> -->
     </div>
-    <button @click="addUser">Create User</button>
+    <!-- <button @click="addUser">Create User</button> -->
     <button @click="uploadImage">Upload Piq</button>
-    <user-modification/>
+    <user-modification :isEditAllowed="false"/>
     <!-- <image-modification/> -->
     <!-- v-if="this.addNewUser" -->
     
@@ -31,46 +47,51 @@
 <script>
 
 // import underscore from 'underscore';
-import UserModification from '../components/userImage.vue'
-// import ImageModification from '../components/imageMods.vue'
+import UserModification from '../components/userImage.vue';
+import { Flicking } from "@egjs/vue-flicking";
+// import { Component, Vue } from "vue-property-decorator";
+// import { Fade, AutoPlay } from "@egjs/flicking-plugins";
 import axios from 'axios';
 export default {
   name: 'Home',
   data() {
     return {
+      isEditAllowedtest: true,
+      images: this.getImages(),
+      users: [],
       addNewUser: false,
-      images: [],
-      addImage: null,
-      addedUser: null,
-      findTitle: "",
-      findItem: null,
-
-      file: null,
-      title: "",
-      description: "",
-      location: "",
 
       slideIndex: 0,
 
       currentImageIndex: 0,
-      len: this.$root.$data.images.length,
+      // len: this.$root.$data.images.length,
       imgid: 1,
       mainImageSrc: "/images/1.jpg",
     }
   },
-  components: {
-    UserModification,
-    // ImageModification
-  },
   created() {
-    this.getItems();
+    this.getUsers();
+    this.getImages();
+  },
+  components: {
+    Flicking: Flicking,
+    UserModification,
   },
   methods: {
-    async getItems() {
+    async getImages() {
+        try {
+            const response = await axios.get(`/api/images`);
+            this.images = response.data;
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async getUsers() {
       try {
-        let response = await axios.get("/api/images");
-        this.images = response.data;
-        return true;
+        const response = await axios.get("/api/users");
+        this.users = response.data;
+        // return true;
       } catch (error) {
         console.log(error);
       }
@@ -78,20 +99,6 @@ export default {
     addUser() {
       this.addNewUser = !this.addNewUser;
     },
-    // async addUser() {
-    //   try {
-    //     let r1 = await axios.post('/api/images', {
-    //       title: this.title,
-    //       description: this.description,
-    //       location: this.location,
-    //       userid: this.activeUserid,
-    //       path: r1.data.path
-    //     });
-    //     this.addedUser = r1.data;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
     async uploadImage() {
       try {
         const formData = new FormData();
@@ -134,20 +141,20 @@ export default {
     startInterval: function () {
       setInterval(() => {
         this.getNextId();
-        this.mainImageSrc = '/images/' + this.$root.$root.images[this.imgid].image;
+        this.mainImageSrc = '/images/' + this.images[this.imgid].image;
       }, 5000);
     },
     getNextId() {
-      this.imgid = Math.floor(Math.random()*this.len)
+      this.imgid = Math.floor(Math.random()*this.images.length)
     }
   },
   computed: {
     // images() {
     //   return underscore.shuffle(this.$root.$data.images);
     // },
-    lenSet() {
-      return this.$root.$data.images.length;
-    },
+    // lenSet() {
+    //   return this.$root.$data.images.length;
+    // },
     covercreation() {
       this.startInterval();
       return true;

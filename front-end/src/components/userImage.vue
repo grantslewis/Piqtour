@@ -1,11 +1,13 @@
 <template>
 <div>
 <h1>User Upload and Editing!</h1>
-  <div class="newUser">
+  <button @click="isAddUser = !isAddUser">Create User</button>
+  <button v-if="isEditAllowed === true" @click="isUserMods = !isUserMods">Edit/Delete Users</button>
+  <div class="newUser" v-if="isAddUser === true">
     <!-- v-if="addNewUser"  -->
     <div class="heading">
       <div class="circle">1</div>
-      <h2>Create a User Acount</h2>
+      <h2>Create a New Account</h2>
     </div>
     <div class="add">
         <form @submit.prevent="addUser">
@@ -26,58 +28,53 @@
     </div>
   </div>
     
-    <div class="heading">
-      <div class="circle">2</div>
-      <h2>Edit/Delete an Account</h2>
-    </div>
-    <div class="edit">
-      <div class="form">
-        <input v-model="findUsername" placeholder="Search Your User">
-        <div class="suggestions" v-if="suggestions.length > 0">
-          <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
+    <div v-if="isUserMods === true">
+      <div class="heading">
+        <div class="circle">2</div>
+        <h2>Edit/Delete an Account</h2>
+      </div>
+      <div class="edit">
+        <div class="form">
+          <input v-model="findUsername" placeholder="Search Your User">
+          <div class="suggestions" v-if="suggestions.length > 0">
+            <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="editingUser" v-if="findUser" @click="toggleEditUser()">
-        <h2>{{findUser.username}} is the active user</h2>
-        <br>
-        <button @click="editUser = !editUser">Edit Account</button>
-      </div>
-      
+        <div class="editingUser" v-if="findUser" @click="toggleEditUser()">
+          <h2>{{findUser.username}} is the active user</h2>
+          <br>
+          <button @click="editUser = !editUser">Edit Account</button>
+        </div>
+        
 
-      <div class="update" v-if="editUser === true">
-        <div > 
-          <h4>Username:</h4>
-          <input type="text" v-model="findUser.username" placeholder="Username">
-        </div>
-        <div> 
-          <h4>First Name:</h4>
-          <input type="text" v-model="findUser.firstname" placeholder="First Name">
-        </div>
-        <div> 
-          <h4>Last Name:</h4>
-          <input type="text" v-model="findUser.lastname" placeholder="Last Name">
-        </div>
-        <div> 
-          <h4>Age:</h4>
-          <input type="number" v-model="findUser.age" placeholder="Age">
-        </div>
-        <div class="actions" v-if="findUser">
-          <button @click="updateUser(findUser)">Save Changes</button>
-          <button @click="deleteUser(findUser)">Delete</button>
-        </div>
+        <div class="update" v-if="editUser === true">
+          <div > 
+            <h4>Username:</h4>
+            <input type="text" v-model="findUser.username" placeholder="Username">
+          </div>
+          <div> 
+            <h4>First Name:</h4>
+            <input type="text" v-model="findUser.firstname" placeholder="First Name">
+          </div>
+          <div> 
+            <h4>Last Name:</h4>
+            <input type="text" v-model="findUser.lastname" placeholder="Last Name">
+          </div>
+          <div> 
+            <h4>Age:</h4>
+            <input type="number" v-model="findUser.age" placeholder="Age">
+          </div>
+          <div class="actions" v-if="findUser">
+            <button @click="updateUser(findUser)">Save Changes</button>
+            <button @click="deleteUser(findUser)">Delete</button>
+          </div>
 
-        <!-- <image-modification :activeUserId="findUserId"/> -->
-        <!-- v-if="editUser === true" -->
-
-        <!-- <input v-model="findItem.title">
-        <p></p>
-        <textarea v-model="findItem.description"></textarea>
-        <p></p>
-        <img :src="findItem.path" /> -->
+          <image-modification :activeUserId="findUserId" :isPhotoMod="isPhotoMod"/>
+        </div>
       </div>
-      
     </div>
+    
     
 </div>
 </template>
@@ -89,6 +86,9 @@ import axios from 'axios';
 export default {
   components: { ImageModification },
   name: 'UserModification',
+  props: {
+    isEditAllowed: Boolean,
+  },
   data() {
     return {
       username: "",
@@ -108,7 +108,9 @@ export default {
 
       // activeUserid: "",
       // addedUser: null,
-      
+      isAddUser: false,
+      isUserMods: false,
+      isPhotoMod: true,  // Always to be true in this case
       editUser: false,
       findUsername: "",
       findUser: null,
@@ -178,7 +180,7 @@ export default {
     },
     async getImages() {
         try {
-            const response = await axios.get(`/api/users/images`);
+            const response = await axios.get(`/api/images`);  // /users/
             this.images = response.data;
         } catch (error) {
             console.log(error);
