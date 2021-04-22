@@ -11,7 +11,8 @@
             <router-link  to="/">Home</router-link>
             <router-link  to="/gallery">Gallery</router-link>
             <router-link  to="/collage">Collage</router-link>
-            <router-link  to="/edit">Edit Account/Images</router-link>
+            <router-link  to="/dashboard">Account Dashboard</router-link>
+            <!-- <router-link  to="/edit">Edit Account/Images</router-link> -->
           </div>
         </div>
         
@@ -32,7 +33,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-
+// import axios from 'axios';
 export default defineComponent({
   setup() {
     
@@ -41,31 +42,37 @@ export default defineComponent({
     return {
       photo: {},
       previous: {},
-      current: this.photo.id
+      current: this.photo.id,
+      // user: null,
     }
   },
+  computed: {
+    user() {
+      return this.$root.$data.user;
+    },
+  },
   methods: {
-    previousComic() {
-      this.number = this.current.num - 1;
-      if (this.number < 1)
-        this.number = 1;
-    },
-    nextComic() {
-      this.number = this.current.num + 1;
-      if (this.number > this.max)
-        this.number = this.max
-    },
-    lastComic() {
-      this.number = this.max;
-    },
-    getRandom(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum and minimum are inclusive
-    },
-    randomComic() {
-      this.number = this.getRandom(1, this.max);
-    },
+    // previousComic() {
+    //   this.number = this.current.num - 1;
+    //   if (this.number < 1)
+    //     this.number = 1;
+    // },
+    // nextComic() {
+    //   this.number = this.current.num + 1;
+    //   if (this.number > this.max)
+    //     this.number = this.max
+    // },
+    // lastComic() {
+    //   this.number = this.max;
+    // },
+    // getRandom(min, max) {
+    //   min = Math.ceil(min);
+    //   max = Math.floor(max);
+    //   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum and minimum are inclusive
+    // },
+    // randomComic() {
+    //   this.number = this.getRandom(1, this.max);
+    // },
   }
 })
 </script>

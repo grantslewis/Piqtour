@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <div v-if="isFetching === false"> 
+    <div>
+      <div>Words</div>
       <flicking 
         
         :options="{ gap: 10, moveType: 'freeScroll'}"
@@ -13,28 +14,30 @@
         :viewportTag="'div'"
         :cameraTag="'div'"
       -->
-        <div>Words</div>
-        <div class="panel" v-for="word in test" :key="word"><p>{{word}}</p></div>
-        <div class="panel" v-for="image in images" :key="image._id"> <img :src="image.path"/></div>
-        <div>Me</div>
+        
+        <!-- <div class="panel" v-for="word in test" :key="word"><p>{{word}}</p></div> -->
+        <div class="panel" v-for="image in images" v-bind:key="image._id"> <img :src="image.path"/></div>
       </flicking>
     </div>
+
+    <h3>Locations:</h3>
+    <locations :locations="locations"/>
     
 
     <carousel :images.sync="images" :isFetching.sync="isFetching"/>
 
-    <div class="slideshow-container"> 
+    <!-- <div class="slideshow-container"> 
       <div class="image" v-for="image in images" :key="image.id">
         <router-link :key="this.imgid" :to="'/photo/' + this.imgid">
           <img :src="images.path" />
         </router-link>
         <div class="text">{{image.title}}</div>
-        <!-- <h2>{{item.title}}</h2> -->
       </div>
       <a class="prev" @click="plusSlides(-1)">&#10094;</a>
       <a class="next" @click="plusSlides(1)">&#10095;</a>
     </div>
-    <p />
+    <p /> -->
+    <!-- <h2>{{item.title}}</h2> -->
     <div style="text-align:center">
       <span class="dot" v-for="image in images" :key="image.id"  @click="currentSlide(image.id)"></span>
       <!-- <span class="dot" @click="currentSlide(1)"></span>
@@ -42,8 +45,8 @@
       <span class="dot" @click="currentSlide(3)"></span> -->
     </div>
     <!-- <button @click="addUser">Create User</button> -->
-    <button @click="uploadImage">Upload Piq</button>
-    <user-modification :isEditAllowed="false"/>
+    <!-- <button @click="uploadImage">Upload Piq</button> -->
+    <!-- <user-modification :isEditAllowed="false"/> -->
     <!-- <image-modification/> -->
     <!-- v-if="this.addNewUser" -->
     
@@ -54,47 +57,55 @@
 <script>
 
 // import underscore from 'underscore';
-import UserModification from '../components/userImage.vue';
+// import UserModification from '../components/userImage.vue';
 import { Flicking } from "@egjs/vue-flicking";
 // import { Component, Vue } from "vue-property-decorator";
 // import { Fade, AutoPlay } from "@egjs/flicking-plugins";
 import axios from 'axios';
 import Carousel from '../components/Carousel.vue';
+import Locations from '../components/Locations.vue';
 export default {
   name: 'Home',
   data() {
     return {
       isEditAllowedtest: true,
-      images: this.getImages(),
+      currlocation: null,
+
+      images: [],
       isFetching: false,
+      locations: [],
       users: [],
-      addNewUser: false,
-      test: ['Hello', 'My', 'Name', 'Is', 2],
+      // addNewUser: false,
+      // test: ['Hello', 'My', 'Name', 'Is', 2],
 
-      slideIndex: 0,
+      // slideIndex: 0,
 
-      currentImageIndex: 0,
+      // currentImageIndex: 0,
+      error: '',
       // len: this.$root.$data.images.length,
-      imgid: 1,
-      mainImageSrc: "/images/1.jpg",
+      // imgid: 1,
+      // mainImageSrc: "/images/1.jpg",
     }
   },
   created() {
     // this.setFetching();
     this.getUsers();
+    this.getLocations();
     this.getImages();
   },
   components: {
     Flicking: Flicking,
-    UserModification,
+    // UserModification,
     Carousel,
+    Locations,
   },
   methods: {
     async getImages() {
         try {
-            const response = await axios.get(`/api/images`);
+            const response = await axios.get(`/api/photos/all`);
             this.images = response.data;
-            this.$set(this.images);
+
+            // this.$set(this.images);
             // this.$set(this.isFetching, this.isFetching, false);
             this.setFetching();
             return true;
@@ -111,29 +122,43 @@ export default {
         console.log(error);
       }
     },
+    async getLocations() {
+      try {
+        let response = await axios.get("/api/locations/all");
+        this.locations = response.data;
+      } catch (error) {
+        this.error = error.response.data.message;
+      }
+    },
     addUser() {
       this.addNewUser = !this.addNewUser;
     },
     setFetching() {
       this.isFetching = !this.isFetching
     },
-    async uploadImage() {
-      try {
-        const formData = new FormData();
-        formData.append('photo', this.file, this.file.name)
-        let r1 = await axios.post('/api/photos', formData);
-        let r2 = await axios.post('/api/images', {
-          title: this.title,
-          description: this.description,
-          location: this.location,
-          userid: this.activeUserid,
-          path: r1.data.path
-        });
-        this.addItem = r2.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async uploadImage() {
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append('photo', this.file, this.file.name);
+    //     formData.append('title', this.title);
+    //     formData.append('description', this.description);
+    //     let r1 = await axios.post('/api/photos/' + this.currlocation._id, formData);
+    //     this.file = null;
+    //     this.url = "";
+    //     this.title = "";
+    //     this.description = "";
+    //     // let r2 = await axios.post('/api/images', {
+    //     //   title: this.title,
+    //     //   description: this.description,
+    //     //   locationId: this.currlocation._id,
+    //     //   userid: this.activeUserid,
+    //     //   path: r1.data.path
+    //     // });
+    //     // this.addItem = r2.data;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     showSlides(n) {
       var i;
       var slides = document.getElementsByClassName("mySlides");

@@ -13,7 +13,7 @@
             -->
             <div>Words</div>
             <!-- <div class="panel" v-for="word in test" :key="word"><p>{{word}}</p></div> -->
-            <div class="panel" v-for="image in images" :key="image._id"> <img :src="image.path"/></div>
+            <div class="panel" v-for="image in images" v-bind:key="image._id"> <img :src="image.path"/></div>
             <div>Me</div>
         </flicking>
     </div>

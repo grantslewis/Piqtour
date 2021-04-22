@@ -4,7 +4,9 @@ import Home from '../views/Home.vue'
 import Gallery from '../views/Gallery.vue'
 import Photo from '../views/Photo.vue'
 import Collage from '../views/Collage.vue'
-import Edit from '../views/Edit.vue'
+// import Edit from '../views/Edit.vue'
+import Location from '../views/Location.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -15,15 +17,20 @@ const routes = [
     component: Home
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
     path: '/gallery',
     name: 'Gallery',
     component: Gallery
   },
-  {
-    path: '/edit',
-    name: 'Edit',
-    component: Edit
-  },
+  // {
+  //   path: '/edit',
+  //   name: 'Edit',
+  //   component: Edit
+  // },
   {
     path: '/collage',
     name: 'Collage',
@@ -33,6 +40,11 @@ const routes = [
     path: '/photo/:id',
     name: 'Photo',
     component: Photo
+  },
+  {
+    path: '/location/:id',
+    name: 'Location',
+    component: Location
   },
 ]
 

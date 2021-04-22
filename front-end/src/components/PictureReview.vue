@@ -28,10 +28,6 @@
         <br>
         <div v-for="comment in comments" v-bind:key="comment._id">
             <div class="commentInfo">
-                <div class="helpUnhelp"> 
-                    <i class="far fa-thumbs-up" @click="addHelpful(comment._id)"></i>
-                    <i class="far fa-thumbs-down" @click="addUnhelpful(comment._id)" ></i>
-                </div>
                 <p class="commentName">{{comment.user.firstName}} {{comment.user.lastName}}</p>
                 <p class="commentDate">{{formatDate(comment.created)}}</p>
             </div>
@@ -42,20 +38,20 @@
 </div>
 </template>
 
-
 <script>
 import moment from 'moment';
 import axios from 'axios';
 export default {
-  name: 'Photo',
+  name: 'PictureReview',
+  props: {
+      photoId: String,
+  },
   data() {
     return {
       photo: null,
       comments: [],
       newComment: '',
       error: '',
-      helpfulSelected: false,
-      unhelpfulSelected: false,
     }
   },
   async created() {
@@ -71,7 +67,7 @@ export default {
   methods: {
     async getPhoto() {
       try {
-        let response = await axios.get("/api/photos/photo/" + this.$route.params.id);
+        let response = await axios.get("/api/photos/" + this.photoId); //$route.params.id
         this.photo = response.data;
       } catch (error) {
         this.error = error.response.data.message;
@@ -79,7 +75,7 @@ export default {
     },
     async getComments() {
         try {
-            this.response = await axios.get("/api/comments/" + this.$route.params.id);
+            this.response = await axios.get("/api/comments/" + this.photoId); //this.$route.params.id
             this.comments = this.response.data.reverse();
         } catch (error) {
             this.error = error.response.data.message;
@@ -88,43 +84,12 @@ export default {
     async addComment() {
         // const formData = new FormData();
         // formData.append('comment', this.newComment);
-        await axios.post("/api/comments/" + this.$route.params.id, {
+        await axios.post("/api/comments/" + this.photoId, { //this.$route.params.id
             comment: this.newComment,
         });
         this.newComment = "";
         this.getComments();
         this.$emit('commentAdded');
-    },
-    alreadyLikedCheck(isHelpful, commentId) {
-        if (this.helpfulSelected === true && this.type !== isHelpful) {
-            this.addHelpful(commentId, -1);
-            this.helpfulSelected = false;
-            this.unhelpfulSelected = true;
-            this.addUnhelpful(commentId, 1);
-        } else if (this.unhelpfulSelected === true && this.type === isHelpful) {
-            this.addUnhelpful(commentId, -1);
-            this.unhelpfulSelected = false;
-            this.helpfulSelected = true;
-            this.addHelpful(commentId, 1);
-        } else if (this.unhelpfulSelected === false && this.helpfulSelected === false) {
-            if (isHelpful === true) {
-                this.helpfulSelected = true;
-                this.addHelpful(commentId, 1);
-            } else {
-                this.unhelpfulSelected = true;
-                this.addUnhelpful(commentId, 1);    
-            }
-        }
-
-    },
-    async addHelpful(commentId ) { // incrament
-        // Add incrament to body!!!!
-        await axios.put("/api/comments/helpful/" + commentId);
-        
-    },
-    async addUnhelpful(commentId) { // incrament
-        // Add incrament to body!!!!
-        await axios.put("/api/comments/unhelpful/" + commentId);
     },
     formatDate(date) {
       if (moment(date).diff(Date.now(), 'days') < 15)
@@ -194,4 +159,6 @@ p {
         width: 80%;
     }
 }
+
+
 </style>

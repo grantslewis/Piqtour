@@ -14,6 +14,9 @@ const users = require("./users.js");
 const User = users.model;
 const validUser = users.valid;
 
+const locations = require("./locations.js");
+const Location = locations.model;
+
 const photoSchema = new mongoose.Schema({
     user: {
       type: mongoose.Schema.ObjectId,
@@ -37,23 +40,25 @@ const photoSchema = new mongoose.Schema({
 
   
   // upload photo
-router.post("/", validUser, upload.single('photo'), async (req, res) => {
+router.post("/:locationId", validUser, upload.single('photo'), async (req, res) => {
     // check parameters
     if (!req.file)
-      return res.status(400).send({
+    return res.status(400).send({
         message: "Must upload a file."
-      });
-  
-    const photo = new Photo({
-      user: req.user,
-      path: "/images/" + req.file.filename,
-      title: req.body.title,
-      review: req.body.review,
-      rating: req.body.rating,
     });
     try {
-      await photo.save();
-      return res.sendStatus(200);
+        let location = await Location.findOne({_id:req.params.locationId});
+        const photo = new Photo({
+            user: req.user,
+            location: location,
+            path: "/images/" + req.file.filename,
+            title: req.body.title,
+            review: req.body.review,
+            rating: req.body.rating,
+        });
+    
+        await photo.save();
+        return res.sendStatus(200);
     } catch (error) {
       console.log(error);
       return res.sendStatus(500);
@@ -77,13 +82,13 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
   });
 
   // get my Photos at a location
-  router.get("/:locationId/:photoId", validUser, async (req, res) => {
+  router.get("/location/:locationId/:photoId", validUser, async (req, res) => {
     // return photos
     try {
-        let location = await Location.findOne({_id:req.params.locationid});
+        let location = await Location.findOne({_id:req.params.locationId});
         let photos = await Photo.find({
             location: location,
-            _id:req.params.photoid,
+            _id:req.params.photoId,
         }).sort({
             created: -1
         }).populate('user');
@@ -95,10 +100,10 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
   });
 
   // get location Photos
-  router.get("/all/:locationId", validUser, async (req, res) => {
+  router.get("/all/:locationId", async (req, res) => {
     // return photos
     try {
-        let location = await Location.findOne({_id:req.params.locationid});
+        let location = await Location.findOne({_id:req.params.locationId});
         let photos = await Photo.find({
             location: location
         }).sort({
@@ -110,6 +115,18 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
       return res.sendStatus(500);
     }
   });
+
+    // // get a specific location
+    // router.get("/photocount/:locationId", async (req, res) => {
+    //     try {
+    //         let location = await Location.findOne({_id:req.params.locationId}).populate('user');
+    //         let photos = await Photo.find({location: location});
+    //         return res.send(photos);
+    //     } catch (error) {
+    //         console.log(error);
+    //         return res.sendStatus(500);
+    //     }
+    // });
   
   // get all photos
   router.get("/all", async (req, res) => {
@@ -125,9 +142,9 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
   });
   
   // get one photo
-  router.get("/:photoid", async (req, res) => {
+  router.get("/photo/:photoid", async (req, res) => {
     try {
-      let photo = await Photo.findOne({_id:req.params.photoid}).populate('user');
+      let photo = await Photo.findOne({_id:req.params.photoid}).populate('user').populate('location');
       return res.send(photo);
     } catch (error) {
       console.log(error);
