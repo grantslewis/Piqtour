@@ -20,18 +20,6 @@
         </div>
         
         <photos :photos="photoList" />
-        <!-- <div v-for="picture in photos" v-bind:key="picture._id">
-            <picture-review :photoId="picture._id"/>
-
-            <img :src="picture.path" />
-            <div class="photoInfo">
-                <p class="photoTitle">{{picture.title}}</p>
-                <p class="photoName">{{picture.user.firstName}} {{picture.user.lastName}}</p>
-            </div>
-            <p class="photoDate">{{formatDate(picture.created)}}</p>
-        </div> -->
-
-
     </div>
 </template>
 
@@ -39,16 +27,9 @@
 <script>
 import axios from 'axios';
 import Photos from '../components/Photos.vue'
-// import PictureReview from '../components/PictureReview.vue'
 import Uploader from '../components/Uploader.vue';
-// import GoogleMap from '../components/GoogleMap.vue'
 export default {
     name: 'Location',
-    props: {
-        // location: Object,
-        // locationPosition: [],
-        // pictures: Array
-    },
     data() {
         return {
             marker: null,
@@ -59,10 +40,8 @@ export default {
         }
     },
     components: {
-        // PictureReview,
         Uploader,
         Photos,
-        // GoogleMap
     },
     async created() {
         this.getLocation();

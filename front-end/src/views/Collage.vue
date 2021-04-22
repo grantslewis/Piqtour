@@ -26,9 +26,7 @@ export default {
     }
   },
   created() {
-    //   this.randomNum();
       this.getPhotos();
-    // this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },
   computed: {
     images() {
@@ -37,7 +35,6 @@ export default {
   },
   methods: {
       resetPhotos: function() {
-        //   this.random = Math.random()*10 + 5;
         this.randomNum()
         this.photolist = underscore.shuffle(this.rawlist).slice(0,this.random);
       },
@@ -52,10 +49,6 @@ export default {
         },
     randomNum() {
         var init = Math.random()* (this.rawlist.length - 2) + 2;
-        // init = init % this.rawlist.length;
-        // if (init < 4) {
-        //     init = 3;
-        // }
         this.random = init;
     }
   },
@@ -95,7 +88,6 @@ export default {
     height: auto;
     max-height: 100vh;
     padding: 10px;
-    /* object-fit: contain; */
 }
 
 #collagebutton {

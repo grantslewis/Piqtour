@@ -16,17 +16,7 @@
       <uploader :show="showPhoto" :locationId="''" @close="close" @uploadFinished="uploadFinished"/>
       <location-adder :show="showLocation" @close="close" @uploadFinished="uploadFinished"/>
 
-      <!-- <h3>Account Settings:</h3>
-      <form class="pure-form">
-        <input placeholder="first name" v-model="firstName">
-        <br>
-        <input placeholder="last name" v-model="lastName">
-        <br>
-        <input placeholder="username" v-model="username">
-        <button type="submit" class="pure-button pure-button-primary" @click.prevent="update">Update Information</button>
-      </form> -->
       <locations :locations="locationlist"></locations>
-      <!-- <input type="password" placeholder="password" v-model="npassword"> -->
   </div>
   <Login v-else />
 </div>
@@ -48,8 +38,6 @@ export default {
         lastName: this.lastName,
         username: this.username,
         locationlist: [],
-        // password: this.password,
-        // npassword: this.password,
     }
   },
   components: {
@@ -83,10 +71,9 @@ export default {
       this.showPhoto = false;
       this.showLocation = false;
     },
-    uploadFinished() { //async
+    uploadFinished() {
       this.showPhoto = false;
       this.showLocation = false;
-    //   this.getPhotos();
     },
     async logout() {
       try {
@@ -94,14 +81,6 @@ export default {
         this.$root.$data.user = null;
       } catch (error) {
         this.$root.$data.user = null;
-      }
-    },
-    async getLocations() {
-      try {
-        let response = await axios.get("/api/locations/user/" + this.user._id);
-        this.locationlist = response.data;
-      } catch (error) {
-        this.error = error.response.data.message;
       }
     },
   },
@@ -125,8 +104,6 @@ export default {
     justify-content: end;
 
 }
-
-
 
 .option {
     margin: 15px;

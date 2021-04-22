@@ -5,11 +5,6 @@
         @place_changed.passive='setPlace'
         style="margin-bottom: 10px"
       />
-      <!-- <button
-        @click='addMarker'
-      >
-        Add
-      </button> -->
     </div>
     <br>
     <GmapMap
@@ -29,7 +24,6 @@
 </template>
 
 <script>
-// import axios from 'axios';
 
 export default {
   name: 'GoogleMap',
@@ -42,26 +36,10 @@ export default {
       places: [],
     }
   },
-  created() {
-    // this.getSights();
-    // this.loadMarkers();
-  },
   mounted() {
     this.geolocate();
   },
   methods: {
-    // async getSights() {
-    //   try {
-    //     let response = await axios.get("/api/sights");
-    //     this.sights = response.data;
-    //     return true;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-    // loadMarkers(){
-      
-    // },
     setPlace(place) {
       this.currentPlace = place;
       this.addMarker();
@@ -77,7 +55,6 @@ export default {
         this.markers.push({ position: marker });
         this.places.push(this.currentPlace);
         this.center = marker;
-        // this.currentPlace = null;
       }
     },
     geolocate: function() {

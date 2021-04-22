@@ -62,8 +62,6 @@ export default {
     },
     created() {
         this.checkLocationIdProvided();
-        
-        // HERRRRRRRRRRRRRRRRRRRRE - load locations 
     },
     computed: {
         suggestions() {
@@ -86,7 +84,6 @@ export default {
             try {
                 const formData = new FormData();
                 formData.append('photo', this.file, this.file.name);
-                // formData.append('locationId', this.locationId);
                 formData.append('title', this.title);
                 formData.append('review', this.review);
                 await axios.post("/api/photos/" + this.locationId, formData);
@@ -119,9 +116,6 @@ export default {
                 this.getLocations();
             }
         },
-        // selectLocationId(locationId) {
-        //     this.locationId = locationId;
-        // }
     },
 }
 </script>

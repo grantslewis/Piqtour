@@ -1,9 +1,5 @@
 <template>
 <transition v-if="show" name="modal">
-  <!-- <div class="modal-mask">
-    <div class="modal-container">
-    </div>
-  </div> -->
   <form class="pure-form" @submit.prevent="addLocation">
         <h3>Add a New Location:</h3>
         <fieldset>
@@ -76,40 +72,6 @@ export default {
                 this.error = "Error: " + error.response.data.message;
             }
         },
-        // async getSights() {
-        //     try {
-        //         let response = await axios.get("/api/locations/all");
-        //         this.locations = response.data;
-        //         return true;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // },
-        // loadMarkers(){
-        //     for(var location in this.locations) {
-        //         this.markers.push({ position: [location.lat, location.lng], title:location.title})
-        //     }
-        // },
-        // addMarker() {
-        //     if (this.currentPlace) {
-        //         const marker = {
-        //         lat: this.currentPlace.geometry.location.lat(),
-        //         lng: this.currentPlace.geometry.location.lng(),
-        //         };
-        //         this.markers.push({ position: marker });
-        //         this.places.push(this.currentPlace);
-        //         this.center = marker;
-        //         this.currentPlace = null;
-        //     }
-        // },
-        // geolocate: function() {
-        //     navigator.geolocation.getCurrentPosition(position => {
-        //         this.center = {
-        //         lat: position.coords.latitude,
-        //         lng: position.coords.longitude,
-        //         };
-        //     });
-        // },
     },
 }
 </script>

@@ -12,12 +12,9 @@
             <router-link  to="/gallery">Gallery</router-link>
             <router-link  to="/collage">Collage</router-link>
             <router-link  to="/dashboard">Account Dashboard</router-link>
-            <!-- <router-link  to="/edit">Edit Account/Images</router-link> -->
           </div>
         </div>
-        
       </div>
-      <!-- <router-link to="/">Home</router-link> -->
     </div>
     <notifications/>
     <router-view/>
@@ -25,7 +22,11 @@
         <p>This website was made by Grant Lewis. View the GitHub repository <a
                 href="https://github.com/grantslewis/Piqtour" target="_blank">
                 here.</a>
+                <br>
+                Time Spent on Lab: 20 hours
         </p>
+        
+        <p></p>
     </div>
   </div>
 </template>
@@ -33,7 +34,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-// import axios from 'axios';
 export default defineComponent({
   setup() {
     
@@ -43,7 +43,6 @@ export default defineComponent({
       photo: {},
       previous: {},
       current: this.photo.id,
-      // user: null,
     }
   },
   computed: {
@@ -51,35 +50,8 @@ export default defineComponent({
       return this.$root.$data.user;
     },
   },
-  methods: {
-    // previousComic() {
-    //   this.number = this.current.num - 1;
-    //   if (this.number < 1)
-    //     this.number = 1;
-    // },
-    // nextComic() {
-    //   this.number = this.current.num + 1;
-    //   if (this.number > this.max)
-    //     this.number = this.max
-    // },
-    // lastComic() {
-    //   this.number = this.max;
-    // },
-    // getRandom(min, max) {
-    //   min = Math.ceil(min);
-    //   max = Math.floor(max);
-    //   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum and minimum are inclusive
-    // },
-    // randomComic() {
-    //   this.number = this.getRandom(1, this.max);
-    // },
-  }
 })
 </script>
-
-
-
-
 
 <style>
 * {
@@ -177,15 +149,3 @@ export default defineComponent({
 }
 
 </style>
-
-// <script>
-// import mock from './mock-data.json'
-
-// export default {
-//   data() {
-//     return {
-//       photoinfo: mock,
-//     }
-//   }
-// }
-// </script>

@@ -21,7 +21,6 @@
             }"
             style='height: 200px;'
         >
-        <!-- width: 200px; border-radius: 20px; -->
             <GmapMarker
                 :position="locationPosition(location)"
                 @click="center=locationPosition(location)"
@@ -41,8 +40,6 @@
 </template>
 
 <script>
-//  :center='locationPosition(location)'
-//         :zoom='10'
 import axios from 'axios';
 import moment from 'moment';
 
@@ -72,14 +69,6 @@ export default {
             console.log(error);
         }
     }
-    // geolocate: function() {
-    //   navigator.geolocation.getCurrentPosition(position => {
-    //     this.center = {
-    //       lat: position.coords.latitude,
-    //       lng: position.coords.longitude,
-    //     };
-    //   });
-    // },
   }
 }
 </script>
@@ -115,29 +104,6 @@ a:hover .map {
 a:hover {
     color: #5170FF;
 }
-
-/* a:hover .map {
-    box-shadow: 10px 5px 5px grey;
-} */
-
-/* .locationDate {
-  font-size: 0.7em;
-  font-weight: normal;
-} */
-
-/* .location {
-    width: 200px;
-    height: 300px;
-    
-} */
-
-/* .map {
-    
-    -webkit-border-radius:20px;
-    -moz-border-radius: 20px;
-    -webkit-transform: translate3d(0px, 0px, 0px);
-
-} */
 
 .location-gallery {
   column-gap: 1em;

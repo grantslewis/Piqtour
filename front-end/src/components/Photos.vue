@@ -16,15 +16,12 @@
         <p class="photoName">{{photo.user.firstName}} {{photo.user.lastName}}</p>
         <p class="photoDate">{{formatDate(photo.created)}}</p>
       </div>
-      <!-- <p class="photoCount">{{photoCount(photo._id)}} Posts About This Photo</p> -->
     </div>
   </section>
 </div>
 </template>
 
 <script>
-//  :center='photoPosition(photo)'
-//         :zoom='10'
 import axios from 'axios';
 import moment from 'moment';
 
@@ -54,14 +51,6 @@ export default {
                 console.log(error);
             }
         },
-    // geolocate: function() {
-    //   navigator.geolocation.getCurrentPosition(position => {
-    //     this.center = {
-    //       lat: position.coords.latitude,
-    //       lng: position.coords.longitude,
-    //     };
-    //   });
-    // },
   }
 }
 </script>
@@ -92,26 +81,6 @@ a:hover img {
 a:hover {
     color: #5170FF;
 }
-
-
-/* .photoDate {
-  font-size: 0.7em;
-  font-weight: normal;
-} */
-
-/* .photo {
-    width: 200px;
-    height: 300px;
-    
-} */
-
-/* .map {
-    
-    -webkit-border-radius:20px;
-    -moz-border-radius: 20px;
-    -webkit-transform: translate3d(0px, 0px, 0px);
-
-} */
 
 .photo-gallery {
   column-gap: 1em;

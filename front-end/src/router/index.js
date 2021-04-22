@@ -26,11 +26,6 @@ const routes = [
     name: 'Gallery',
     component: Gallery
   },
-  // {
-  //   path: '/edit',
-  //   name: 'Edit',
-  //   component: Edit
-  // },
   {
     path: '/collage',
     name: 'Collage',

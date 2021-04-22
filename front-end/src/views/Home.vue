@@ -18,20 +18,12 @@
     <h3>Locations:</h3>
     <locations :locations="locations"/>
 
-    <!-- <carousel :images.sync="images" :isFetching.sync="isFetching"/>    -->
-
   </div>
 </template>
 
 <script>
-
-// import underscore from 'underscore';
-// import UserModification from '../components/userImage.vue';
 import { Flicking } from "@egjs/vue-flicking";
-// import { Component, Vue } from "vue-property-decorator";
-// import { Fade, AutoPlay } from "@egjs/flicking-plugins";
 import axios from 'axios';
-// import Carousel from '../components/Carousel.vue';
 import Locations from '../components/Locations.vue';
 export default {
   name: 'Home',
@@ -44,28 +36,16 @@ export default {
       isFetching: false,
       locations: [],
       users: [],
-      // addNewUser: false,
-      // test: ['Hello', 'My', 'Name', 'Is', 2],
-
-      // slideIndex: 0,
-
-      // currentImageIndex: 0,
       error: '',
-      // len: this.$root.$data.images.length,
-      // imgid: 1,
-      // mainImageSrc: "/images/1.jpg",
     }
   },
   created() {
-    // this.setFetching();
     this.getUsers();
     this.getLocations();
     this.getImages();
   },
   components: {
     Flicking: Flicking,
-    // UserModification,
-    // Carousel,
     Locations,
   },
   methods: {
@@ -74,8 +54,6 @@ export default {
             const response = await axios.get(`/api/photos/all`);
             this.images = response.data;
 
-            // this.$set(this.images);
-            // this.$set(this.isFetching, this.isFetching, false);
             this.setFetching();
             return true;
         } catch (error) {
@@ -106,13 +84,6 @@ export default {
       this.isFetching = !this.isFetching
     },
   },
-  computed: {
-    // covercreation() {
-    //   this.startInterval();
-    //   return true;
-    // }
-    
-  },
 }
 
 </script>
@@ -130,11 +101,6 @@ export default {
   display: none;
 
 }
-
-/* .panel {
-  height: 400px;
-} */
-
 
 .image {
   width: auto;

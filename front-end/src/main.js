@@ -13,13 +13,8 @@ var googlemapskey = require('./assets/googleapikey.json');
 Vue.config.productionTip = false
 Vue.use(Notifications)
 
-// import mock from './mock-data.json'
-
 let data = {
   user: null,
-  // images: mock,
-  // liked: [],
-  // previous: [],
 }
 
 Vue.use(VueFlicking);

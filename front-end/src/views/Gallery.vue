@@ -32,7 +32,6 @@ export default {
   },
   created() {
       this.getPhotos();
-    // this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },
   computed: {
       images() {
@@ -60,8 +59,6 @@ export default {
   },
 }
 </script>
-
-
 
 <style scoped>
 .intro {
