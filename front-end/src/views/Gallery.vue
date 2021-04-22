@@ -1,5 +1,6 @@
 <template>
         <div class="wrapper">
+            <photos :photos="photolist"></photos>
             <div class="images">
                 <router-link class="imgdiv" v-for="image in images" :key="image.id" :to="'/photo/' + image.id">
                     <div class="image" :style="{'background-image':'url(/images/' + image.image + ')'}" @mouseover="hoverPhoto" @mouseout="hoverPhoto">
@@ -12,9 +13,10 @@
 
 <script>
 import underscore from 'underscore';
-
+import axios from 'axios';
+import Photos from '../components/Photos.vue';
 export default {
-  name: 'Home',
+  name: 'Gallery',
   data() {
     return {
       photohover: false,
@@ -22,11 +24,15 @@ export default {
       infoselect: false,
       random: 0,
       amount: 0,
-      photo: {},
+      photolist: [],
     }
   },
+  components:{
+      Photos,
+  },
   created() {
-    this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
+      this.getPhotos();
+    // this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },
   computed: {
       images() {
@@ -42,7 +48,15 @@ export default {
       },
       clickInfo: function() {
           this.infoselect = !this.infoselect
-      }
+      },
+      async getPhotos() {
+            try {
+                const response = await axios.get('/api/photos/all/');
+                this.photolist = response.data;
+            } catch (error) {
+                console.log(error);
+            }
+        },
   },
 }
 </script>

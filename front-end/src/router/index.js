@@ -39,7 +39,8 @@ const routes = [
   {
     path: '/photo/:id',
     name: 'Photo',
-    component: Photo
+    component: Photo,
+    props: true,
   },
   {
     path: '/location/:id',

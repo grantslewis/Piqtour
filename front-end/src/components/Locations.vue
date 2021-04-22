@@ -3,7 +3,7 @@
   <section class="location-gallery">
     <div class="location" v-for="location in locations" v-bind:key="location._id">
       <router-link class="locationLink" :to="{ name: 'Location', params: { id: location._id }}">
-          <h2>{{location.title}}</h2>
+          <h4>{{location.title}}</h4>
         <GmapMap
             class="map"
             :center='locationPosition(location)'
@@ -103,9 +103,22 @@ export default {
 
 }
 
-a:hover .map {
-    box-shadow: 10px 5px 5px grey;
+.location a {
+    text-decoration: none;
+    color:#004AAB;
 }
+
+a:hover .map {
+    box-shadow: 10px 5px 5px rgb(144, 140, 140);
+}
+
+a:hover {
+    color: #5170FF;
+}
+
+/* a:hover .map {
+    box-shadow: 10px 5px 5px grey;
+} */
 
 /* .locationDate {
   font-size: 0.7em;

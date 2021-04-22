@@ -10,39 +10,59 @@
             <i class="fas fa-plus fa-2x" style="padding-right: 5px;"></i>
             <i class="fas fa-map-marker-alt fa-2x"></i>
         </a></p>
-        <h2 class="option">{{user.firstName}} {{user.lastName}} <a @click="logout"><i class="fas fa-sign-out-alt"></i></a></h2>
+        <h2 class="option"><a @click="logout">{{user.firstName}} {{user.lastName}} <i class="fas fa-sign-out-alt"></i></a></h2>
       </div>
      
       <uploader :show="showPhoto" :locationId="''" @close="close" @uploadFinished="uploadFinished"/>
       <location-adder :show="showLocation" @close="close" @uploadFinished="uploadFinished"/>
-      <!-- <router-link to=""><i class="fas fa-map-marker-alt"></i></router-link>  -->
+
+      <!-- <h3>Account Settings:</h3>
+      <form class="pure-form">
+        <input placeholder="first name" v-model="firstName">
+        <br>
+        <input placeholder="last name" v-model="lastName">
+        <br>
+        <input placeholder="username" v-model="username">
+        <button type="submit" class="pure-button pure-button-primary" @click.prevent="update">Update Information</button>
+      </form> -->
+      <locations :locations="locationlist"></locations>
+      <!-- <input type="password" placeholder="password" v-model="npassword"> -->
   </div>
   <Login v-else />
 </div>
 </template>
 
 <script>
-// import MyPhotos from '@/components/MyPhotos.vue';
 import axios from 'axios';
 import Login from '../components/Login.vue';
 import Uploader from '../components/Uploader.vue';
 import LocationAdder from '../components/LocationAdder.vue';
-
+import Locations from '../components/Locations.vue';
 export default {
   name: 'dashboard',
   data() {
     return {
         showPhoto: false,
         showLocation: false,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        username: this.username,
+        locationlist: [],
+        // password: this.password,
+        // npassword: this.password,
     }
   },
   components: {
-    // MyPhotos,
     Login,
     Uploader,
-    LocationAdder
+    LocationAdder,
+    Locations
   },
   async created() {
+      this.firstName = this.user.firstName;
+      this.lastName = this.user.lastName;
+      this.username = this.user.username;
+      
     try {
       let response = await axios.get('/api/users');
       this.$root.$data.user = response.data.user;
@@ -74,6 +94,14 @@ export default {
         this.$root.$data.user = null;
       } catch (error) {
         this.$root.$data.user = null;
+      }
+    },
+    async getLocations() {
+      try {
+        let response = await axios.get("/api/locations/user/" + this.user._id);
+        this.locationlist = response.data;
+      } catch (error) {
+        this.error = error.response.data.message;
       }
     },
   },

@@ -3,11 +3,15 @@
   <section class="photo-gallery">
     <div class="photo" v-for="photo in photos" v-bind:key="photo._id">
       <router-link class="photoLink" :to="{ name: 'Photo', params: { id: photo._id }}">
-          <h2>{{photo.title}}</h2>
+          <h3>{{photo.title}}</h3>
           <img :src="photo.path" />
       </router-link>
-      
-
+      <div>
+        
+        <router-link class="locationLink" :to="{ name: 'Location', params: { id: photo.location }}">
+          <p class="photoLocation">{{getPhotoLocation(photo.location).title}}</p>
+        </router-link>
+      </div>
       <div class="photoInfo">
         <p class="photoName">{{photo.user.firstName}} {{photo.user.lastName}}</p>
         <p class="photoDate">{{formatDate(photo.created)}}</p>
@@ -21,13 +25,18 @@
 <script>
 //  :center='photoPosition(photo)'
 //         :zoom='10'
-// import axios from 'axios';
+import axios from 'axios';
 import moment from 'moment';
 
 export default {
   name: 'Photos',
   props: {
     photos: Array
+  },
+  data() {
+    return {
+      location: null,
+    }
   },
   methods: {
     formatDate(date) {
@@ -36,6 +45,15 @@ export default {
       else
         return moment(date).format('d MMMM YYYY');
     },
+    async getPhotoLocation(locationId) {
+            try {
+                const response = await axios.get('/api/locations/' + locationId);
+                this.location = response.data;
+                return response.data;
+            } catch (error) {
+                console.log(error);
+            }
+        },
     // geolocate: function() {
     //   navigator.geolocation.getCurrentPosition(position => {
     //     this.center = {
@@ -62,14 +80,19 @@ export default {
   margin: 0px;
 }
 
-.photoLink a {
+.photo a {
     text-decoration: none;
-
+    color:#004AAB;
 }
 
-a:hover .map {
-    box-shadow: 10px 5px 5px grey;
+a:hover img {
+    box-shadow: 10px 5px 5px rgb(144, 140, 140);
 }
+
+a:hover {
+    color: #5170FF;
+}
+
 
 /* .photoDate {
   font-size: 0.7em;
@@ -151,5 +174,10 @@ p {
   .photo-gallery {
     column-count: 2;
   }
+}
+
+a {
+  text-decoration: none;
+  color: #004AAB;
 }
 </style>

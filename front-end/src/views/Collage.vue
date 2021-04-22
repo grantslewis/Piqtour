@@ -3,8 +3,8 @@
         <h1 style="padding: 20px">Here is the Collage We Made You!</h1>
         <button id="collagebutton" v-on:click="resetPhotos">Get A New Collage</button>
         <div class="images">
-            <router-link v-for="image in images" :key="image.id" :to="'/photo/' + image.id">
-                <img :src="'/images/'+image.image" class="image"> 
+            <router-link v-for="image in photolist" v-bind:key="image._id" :to="image.path">
+                <img :src="image.path" class="image"> 
             </router-link>
         </div>
     </div>
@@ -12,30 +12,52 @@
 
 <script>
 import underscore from 'underscore';
-
+import axios from 'axios';
 export default {
-  name: 'Home',
+  name: 'Collage',
   data() {
     return {
       photohover: false,
       infohover: false,
       infoselect: false,
-      random: Math.random()*10 + 5,
+      random: 1,
+      photolist: [],
+      rawlist: [],
     }
   },
   created() {
-    this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
+    //   this.randomNum();
+      this.getPhotos();
+    // this.photo = this.$root.$data.images.find(photo => photo.id === parseInt(this.$route.params.id));
   },
   computed: {
     images() {
-        return underscore.shuffle(this.$root.$data.images).slice(0,this.random);
+        return underscore.shuffle(this.photolist).slice(0,this.random);
     },
   },
   methods: {
       resetPhotos: function() {
-          this.random = Math.random()*10 + 5;
-          this.images = underscore.shuffle(this.$root.$data.images).slice(0,this.random);
+        //   this.random = Math.random()*10 + 5;
+        this.randomNum()
+        this.photolist = underscore.shuffle(this.rawlist).slice(0,this.random);
       },
+      async getPhotos() {
+            try {
+                const response = await axios.get('/api/photos/all/');
+                this.rawlist = response.data;
+                this.resetPhotos();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    randomNum() {
+        var init = Math.random()* (this.rawlist.length - 2) + 2;
+        // init = init % this.rawlist.length;
+        // if (init < 4) {
+        //     init = 3;
+        // }
+        this.random = init;
+    }
   },
 }
 </script>

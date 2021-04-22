@@ -47,9 +47,10 @@ const Location =  mongoose.model('Location', locationSchema);
 });
 
 // get a user's locations
-router.get("/user", validUser, async (req, res) => {
+router.get("/user/:userId", validUser, async (req, res) => {
     // return photos
     try {
+        let user = await User.findOne({_id: req.params.userId})
       let locations = await Location.find({
         user: req.user
       }).sort({

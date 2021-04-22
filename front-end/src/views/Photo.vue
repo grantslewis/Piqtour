@@ -1,5 +1,9 @@
 <template>
 <div class="photoView">
+    <router-link class="locationLink" :to="{ name: 'Location', params: { id: photo.location._id }}">
+        <i class="fas fa-angle-left fa-2x"></i> <h2>Back to Location</h2>
+    </router-link>
+
     <div class="image"> 
         <img :src="photo.path" />
         <div class="photoInfo">
@@ -86,8 +90,6 @@ export default {
         }
     },
     async addComment() {
-        // const formData = new FormData();
-        // formData.append('comment', this.newComment);
         await axios.post("/api/comments/" + this.$route.params.id, {
             comment: this.newComment,
         });
@@ -163,6 +165,14 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: 2em;
+}
+
+.locationLink {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    color: #004AAB;
+    align-content: center;
 }
 
 .commentInfo {

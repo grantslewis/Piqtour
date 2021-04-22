@@ -11,7 +11,6 @@
                 @click="center=locationPosition"
             />
         </GmapMap>
-        <!-- <GoogleMap /> -->
         <div v-if="user">
             <p class="option"><a @click="togglePhoto">
                 <i class="fas fa-plus fa-2x" style="padding-right: 5px;"></i>
@@ -106,11 +105,10 @@ export default {
             this.showPhoto = false;
             this.showLocation = false;
         },
-        uploadFinished() { //async
+        uploadFinished() {
             this.showPhoto = false;
             this.showLocation = false;
             this.getPhotos();
-            //   this.getPhotos();
         },
     },
     computed: {
@@ -118,7 +116,13 @@ export default {
             return this.$root.$data.user;
         }
     },
-    
-
 }
 </script>
+
+<style>
+.option {
+    margin: 20px;
+    display: flex;
+    justify-content: left;
+}
+</style>

@@ -108,11 +108,16 @@ export default defineComponent({
 
 #nav a {
   font-weight: bold;
+  text-decoration: none;
   color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
   color: #5170FF;
+}
+
+#nav a:hover {
+  color: #5CE1E6;
 }
 
 #logo {
