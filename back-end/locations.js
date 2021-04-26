@@ -17,6 +17,7 @@ const locationSchema = new mongoose.Schema({
     lat: String,
     description: String,
     placeId: String,
+    photoCount: Number,
     created: {
         type: Date,
         default: Date.now
@@ -34,8 +35,9 @@ const Location =  mongoose.model('Location', locationSchema);
       title: req.body.title,
       lng: req.body.lng,
       lat: req.body.lat,
-      placeId: req.body.placeId,
       description: req.body.description,
+      placeId: req.body.placeId,
+      photoCount: 0,
     });
     try {
       await location.save();
@@ -86,6 +88,18 @@ router.get("/:locationid", async (req, res) => {
         console.log(error);
         return res.sendStatus(500);
     }
+});
+
+router.put("/incrament/:locationid", async (req, res) => {
+  try {
+    let location = await Location.findOne({_id:req.params.locationid}).populate('user');
+    location.photoCount = location.photoCount + 1;
+    location.save();
+    res.send(location); 
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
 });
 
 

@@ -108,4 +108,8 @@ export default {
 .option {
     margin: 15px;
 }
+
+.option:hover {
+    color: rgb(0,74,171);
+}
 </style>

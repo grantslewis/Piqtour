@@ -38,8 +38,8 @@ const commentSchema = new mongoose.Schema({
             user: req.user,
             photo: photo,
             comment: req.body.comment,
-            helpful: req.body.helpful,
-            unhelpful: req.body.unhelpful,
+            helpful: 0,
+            unhelpful: 0,
         });
         await comment.save();
         return res.sendStatus(200);
@@ -65,10 +65,10 @@ const commentSchema = new mongoose.Schema({
     }
   });
 
-  router.put("/helpful/:commentId", async (req, res) => {
+  router.put("/helpful/inc/:commentId", async (req, res) => {
         try {
             let comment = await Comment.findOne({_id:req.params.commentId});
-            comment.helpful = comment.helpful + req.body.incrament;
+            comment.helpful = comment.helpful + 1;
             comment.save();
             
             res.send(comment);          
@@ -78,10 +78,36 @@ const commentSchema = new mongoose.Schema({
       }
   });
 
-  router.put("/unhelpful/:commentId", async (req, res) => {
+  router.put("/helpful/dec/:commentId", async (req, res) => {
+      try {
+          let comment = await Comment.findOne({_id:req.params.commentId});
+          comment.helpful = comment.helpful - 1;
+          comment.save();
+          
+          res.send(comment);          
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+  });
+
+  router.put("/unhelpful/inc/:commentId", async (req, res) => {
     try {
         let comment = await Comment.findOne({_id:req.params.commentId});
-        comment.unhelpful = comment.unhelpful + req.body.incrament;
+        comment.unhelpful = comment.unhelpful + 1;
+        comment.save();
+        
+        res.send(comment);          
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+  });
+
+  router.put("/unhelpful/dec/:commentId", async (req, res) => {
+    try {
+        let comment = await Comment.findOne({_id:req.params.commentId});
+        comment.unhelpful = comment.unhelpful - 1;
         comment.save();
         
         res.send(comment);          
@@ -94,7 +120,6 @@ const commentSchema = new mongoose.Schema({
   router.delete("/:commentId", validUser, async (req, res) => {
       try {
         await Comment.deleteOne({
-            user: req.user,
             _id: req.params.commentId
         });
         // TODO UPDATE AND SEND COMMENTS FOR PHOTO!!!!

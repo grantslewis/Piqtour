@@ -25,8 +25,6 @@
                 <br>
                 Time Spent on Lab: 20 hours
         </p>
-        
-        <p></p>
     </div>
   </div>
 </template>

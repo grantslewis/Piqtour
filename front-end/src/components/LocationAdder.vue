@@ -59,6 +59,7 @@ export default {
             try {
                 await axios.post("/api/locations", {
                     title: this.currentPlace.formatted_address,
+                    description: this.description,
                     lng: this.lngstr,
                     lat: this.latstr,
                     placeId: this.currentPlace.placeId,

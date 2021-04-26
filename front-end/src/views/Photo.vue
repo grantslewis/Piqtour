@@ -1,19 +1,25 @@
 <template>
 <div class="photoView">
-    <router-link class="locationLink" :to="{ name: 'Location', params: { id: photo.location._id }}">
-        <i class="fas fa-angle-left fa-2x"></i> <h2>Back to Location</h2>
+    <br>
+    <router-link class="locationLink highlightable" :to="{ name: 'Location', params: { id: photo.location._id }}">
+      <i class="fas fa-angle-left fa-2x"></i> <h2>Back to Location</h2>
     </router-link>
-
     <div class="image"> 
-        <img :src="photo.path" />
+        <img class="photo" :src="photo.path" />
+        <!-- <div class="photobg" style="background-image: url('photo.path');"/> -->
         <div class="photoInfo">
             <p class="photoTitle">{{photo.title}}</p>
-            <p class="photoName">{{photo.user.firstName}} {{photo.user.lastName}}</p>
+            <p class="photoUserInfo">{{photo.user.firstName}} {{photo.user.lastName}} - {{formatDate(photo.created)}}</p>
         </div>
-        <p class="photoDate">{{formatDate(photo.created)}}</p>
-        <p class="photoDesc">{{photo.description}}</p>
+        <!-- <p class="photoDate">{{formatDate(photo.created)}}</p> -->
+        <hr>
+        <br>
+        <p style="font-size: 1.5em;">Review:</p>
+        <p class="desc">{{photo.review}}</p>
+        <br>
+        <hr>
+        <br>
     </div>
-    <br>
     <div class="comments">
         <div class="newComment" v-if="user"> 
             <p class="commentInfo">Add a New Comment:</p>
@@ -28,20 +34,36 @@
                 </form>
                 </div>
         </div>
-        <p class="photoInfo">Comments:</p>
-        <br>
-        <div v-for="comment in comments" v-bind:key="comment._id">
-            <div class="commentInfo">
-                <div class="helpUnhelp"> 
-                    <i class="far fa-thumbs-up" @click="addHelpful(comment._id)"></i>
-                    <i class="far fa-thumbs-down" @click="addUnhelpful(comment._id)" ></i>
-                </div>
+        <!-- <hr>
+        <br> -->
+        <div class="existingComments">
+          <p style="font-size: 1.5em;">Comments:</p>
+          <br>
+          <div v-for="comment in comments" v-bind:key="comment._id">
+              <div class="commentUserInfo">
                 <p class="commentName">{{comment.user.firstName}} {{comment.user.lastName}}</p>
                 <p class="commentDate">{{formatDate(comment.created)}}</p>
-            </div>
-            <p class="commentDesc">{{comment.comment}}</p>
-            <hr>
+              </div>
+              <div class="commentInfo">
+                  <div class="helpUnhelp">
+                      <div class="helpful highlightable" style="margin-right: 8px;"  @click="addHelpful(comment._id)">
+                        <!-- v-if="comment.helpful > 0" -->
+                        <p>{{comment.helpful}} <i class="far fa-thumbs-up" style="margin-left: 3px;"></i></p>
+                      </div> 
+                      <div class="unhelpful highlightable" @click="addUnhelpful(comment._id)">
+                        <p><i class="far fa-thumbs-down" style="margin-right: 3px;"></i>{{comment.unhelpful}}</p>
+                      </div>                  
+                  </div>
+                  <p class="descComment">{{comment.comment}}</p>
+                  <div v-if="user._id == comment.user._id" class="highlightable" @click="removeComment(comment._id)">
+                    <i class="fas fa-trash-alt" style="margin-left: 10px; font-size: 1.3em;"></i>
+                  </div>         
+              </div>
+              <hr>
+              <br>
+          </div>
         </div>
+        
     </div>
 </div>
 </template>
@@ -83,8 +105,8 @@ export default {
     },
     async getComments() {
         try {
-            this.response = await axios.get("/api/comments/" + this.$route.params.id);
-            this.comments = this.response.data.reverse();
+            let response = await axios.get("/api/comments/" + this.$route.params.id);
+            this.comments = response.data.reverse().sort((a,b) => (b.helpful-b.unhelpful)-(a.helpful-a.unhelpful))
         } catch (error) {
             this.error = error.response.data.message;
         }
@@ -96,6 +118,11 @@ export default {
         this.newComment = "";
         this.getComments();
         this.$emit('commentAdded');
+    },
+    async removeComment(commentId) {
+      await axios.delete("/api/comments/" + commentId);
+      this.getComments();
+      this.$emit('commentDeleted');
     },
     alreadyLikedCheck(isHelpful, commentId) {
         if (this.helpfulSelected === true && this.type !== isHelpful) {
@@ -119,14 +146,16 @@ export default {
         }
 
     },
-    async addHelpful(commentId ) { // incrament
+    async addHelpful(commentId) { // incrament
         // Add incrament to body!!!!
-        await axios.put("/api/comments/helpful/" + commentId);
+        await axios.put("/api/comments/helpful/inc/" + commentId);
+        this.getComments();
         
     },
     async addUnhelpful(commentId) { // incrament
         // Add incrament to body!!!!
-        await axios.put("/api/comments/unhelpful/" + commentId);
+        await axios.put("/api/comments/unhelpful/inc/" + commentId);
+        this.getComments();
     },
     formatDate(date) {
       if (moment(date).diff(Date.now(), 'days') < 15)
@@ -151,6 +180,18 @@ export default {
     width: 100%;
 }
 
+p {
+  display: flex;
+  justify-content: start;
+  font-size: 1.2em;
+}
+
+hr {
+  height: 1px;
+  background-color: lightgrey;
+  border: none;
+}
+
 .image {
   margin: 0 0 1.5em;
   display: inline-block;
@@ -158,27 +199,37 @@ export default {
 }
 
 .image img {
-  width: 100%;
+  width: 60%;
 }
 
 .photoInfo {
   display: flex;
   justify-content: space-between;
-  font-size: 2em;
+  font-size: 1.7em;
+}
+
+.photoUserInfo {
+  font-size: 1.0em;
 }
 
 .locationLink {
     display: flex;
     flex-direction: row;
     text-decoration: none;
-    color: #004AAB;
+    justify-content: start;
+    width: fit-content;
+    margin-right: auto;
+    color: #2C3E50;
+    /* color: #004AAB; */
     align-content: center;
 }
 
+
 .commentInfo {
   display: flex;
-  justify-content: space-between;
-  font-size: 1.2em;
+  justify-content: start;
+  font-size: 1em;
+  margin-bottom: 5px;
 }
 
 .photoInfo p {
@@ -190,10 +241,50 @@ export default {
   font-weight: normal;
 }
 
-p {
+.comments {
+  display: flex;
+
+}
+
+.commentUserInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.helpUnhelp {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  font-size: 1.2em;
+}
+
+.desc, .descComment {
+    text-align: start;
+  /* display: flex; */
+  /* justify-content: start; */
+    font-size: 1.2em;
+    padding-left: 20px;
+}
+
+.descComment {
+  margin-right: auto;
+}
+
+.desc {
+  padding-right: 20px;
+}
+
+.highlightable:hover {
+  color: #004AAB;
+}
+
+
+/* p {
     font-size: 1em;
     margin: 0px;
-}
+} */
 
 /* Masonry on large screens */
 @media only screen and (min-width: 768px) {
@@ -201,7 +292,47 @@ p {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 80%;
+        width: 70%;
     }
+
+    .desc, .descComment {
+      padding-left: 40px;
+    }
+
+    .desc {
+      padding-right: 40px;
+    }
+    
+    .photo {
+      width: 70%
+    }
+    /* .photo {
+      height: 70vh;
+      width: max-content;
+    } */
+
+    .photobg {
+      width: 100%;
+      height: 70vh;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .comments {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-content: flex-start;
+      width: 100%;
+    }
+
+    .existingComments {
+      width: 70%;
+    }
+
+    .addComment {
+      width: 25%;
+    }
+
 }
 </style>

@@ -11,15 +11,29 @@
                 @click="center=locationPosition"
             />
         </GmapMap>
-        <div v-if="user">
-            <p class="option"><a @click="togglePhoto">
-                <i class="fas fa-plus fa-2x" style="padding-right: 5px;"></i>
-                <i class="fas fa-image fa-2x"></i>
-            </a></p>
-            <uploader :locationId="location._id" :show="showPhoto" @close="close" @uploadFinished="uploadFinished"/>
+        
+    
+
+        <div class="content">
+
+
+            <div class="option">
+                <h2>Description of Location:</h2>
+                <div v-if="user">
+                    <p class="adder"><a @click="togglePhoto">
+                        <i class="fas fa-plus fa-2x" style="padding-right: 5px;"></i>
+                        <i class="fas fa-image fa-2x"></i>
+                    </a></p>
+                    <!-- class="option" -->
+                    <uploader :locationId="location._id" :show="showPhoto" @close="close" @uploadFinished="uploadFinished"/>
+                </div>
+            </div>
+            <p class="desc">{{location.description}}</p>
+            <br>
+            <h2>Activities to Tour:</h2>
+            <photos :photos="photoList" />
         </div>
         
-        <photos :photos="photoList" />
     </div>
 </template>
 
@@ -100,8 +114,42 @@ export default {
 
 <style>
 .option {
-    margin: 20px;
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
+    align-content: end;
 }
+
+h2 {
+    display: flex;
+    justify-content: start;
+}
+
+p .desc {
+    text-align: start;
+  /* display: flex; */
+  /* justify-content: start; */
+    font-size: 1.2em;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+p .adder {
+    margin-right: 20px;
+}
+
+.adder:hover {
+    color: rgb(0,74,171);
+}
+
+.content {
+    margin: 20px;
+}
+
+@media (min-width: 720px) {
+    .content, p .desc {
+        margin-left: 40px;
+        margin-right: 40px;
+    }
+}
+
 </style>

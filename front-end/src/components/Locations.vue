@@ -33,14 +33,15 @@
         <p class="locationName">{{location.user.firstName}} {{location.user.lastName}}</p>
         <p class="locationDate">{{formatDate(location.created)}}</p>
       </div>
-      <p class="photoCount">{{photoCount(location._id)}} Posts About This Location</p>
+      <p class="photoCount">{{location.photoCount}} Posts About This Location</p>
+      <!-- {{photoCount(location._id)}} -->
     </div>
   </section>
 </div>
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 import moment from 'moment';
 
 export default {
@@ -61,14 +62,14 @@ export default {
         let position = { lat: latval, lng: lngval };
         return position;        
     },
-    async photoCount(locationId) {
-        try {
-            const response = await axios.get('/api/photos/all/' + locationId);
-            return response.data.length;
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // async photoCount(locationId) {
+    //     try {
+    //         const response = await axios.get('/api/photos/all/' + locationId);
+    //         return response.data.length;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
   }
 }
 </script>

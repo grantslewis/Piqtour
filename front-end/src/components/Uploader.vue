@@ -87,6 +87,7 @@ export default {
                 formData.append('title', this.title);
                 formData.append('review', this.review);
                 await axios.post("/api/photos/" + this.locationId, formData);
+                await axios.put("/api/locations/incrament/" + this.locationId);
                 this.file = null;
                 this.url = "";
                 this.title = "";
